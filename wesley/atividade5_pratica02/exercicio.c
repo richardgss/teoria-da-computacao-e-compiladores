@@ -5,6 +5,17 @@ typedef struct vets {
   int vet2[20];
 } t_vets;
 
+typedef struct pot_vet {
+    int vet[20];
+} t_pot_vet;
+
+int arr_len(int* arr, int limit) {
+  int len = 0;
+  while(arr[len] != 0 && len++ < limit) {}
+  return len;
+}
+
+
 void print_arr(int* array, int len) {
   printf("{ ");
   for (int i=0; i<len; i++) {
@@ -13,12 +24,25 @@ void print_arr(int* array, int len) {
   printf(" }");
 }
 
+void print_conjs_pot(t_pot_vet* s_vet, int len, int max_vet_len) {
+    int vet_len = 0;
+    for (int i=0; i<len; i++) {
+        int* vet = s_vet[i].vet;
+        vet_len = arr_len(vet, max_vet_len);
+        printf("{");
+        for (int x=0; x<vet_len; x++) {
+            printf("%d%s", vet[x], x == vet_len -1 ? "" : ", ");
+        }
+        printf("}");
+    }
+}
+
 void write_t_vets(t_vets mVets, const char* fname) {
   FILE *arq;
   arq = fopen(fname, "wb");
 
   if (arq == NULL) {
-    printf("\n Erro ao abrir o arquivo arquivoC.txt.");
+    printf("\n Erro ao abrir o arquivo %s.", fname);
     return;
   }
 
@@ -26,18 +50,24 @@ void write_t_vets(t_vets mVets, const char* fname) {
   fclose(arq);
 }
 
-int arr_len(int* arr, int limit) {
-  int len = 0;
-  while(arr[len] != 0 && len++ < limit) {}
-  return len;
-}
-
-void imprime_combinacao(int tuple[], int input_len, int r, int* data, int index, int i) {
+void imprime_combinacao(
+    int tuple[], int input_len, int r, int* data, int index, int i, t_pot_vet* s_vet, int s_vet_len
+) {
   if (index == r) {
+    int* m_s_vet = s_vet[index - 1].vet;
+    int j;
+    
     printf("{ ");
-    // Print the combination
-    for (int j = 0; j < r; j++) {
+    // Printa a combinacao do vetor
+    for (j = 0; j < r; j++) {
+      // Salva o elemento na posicao do vetor atual da lista de conjuntos potencia
+      m_s_vet[j] = data[j];
+      // Printa o subconjunto do conjunto potencia
       printf("%d%s",  data[j], (j == r - 1 ? " " : ", "));
+    }
+    // Preenche restante do vetor com zero.
+    while(j++ < s_vet_len) {
+        m_s_vet[j] = 0;
     }
     printf("}");
     printf(" ");
@@ -50,16 +80,16 @@ void imprime_combinacao(int tuple[], int input_len, int r, int* data, int index,
 
   // Include the current element and recursively generate combinations
   data[index] = tuple[i];
-  imprime_combinacao(tuple, input_len, r, data, index + 1, i + 1);
+  imprime_combinacao(tuple, input_len, r, data, index + 1, i + 1, s_vet, s_vet_len);
 
   // Exclude the current element (generate combinations without it)
-  imprime_combinacao(tuple, input_len, r, data, index, i + 1);
+  imprime_combinacao(tuple, input_len, r, data, index, i + 1, s_vet, s_vet_len);
 }
 
 // Function to print all combinations of 'r' elements from 'n' elements
-void imprime_todas_combinacoes(int* tuple, int input_len, int r) {
+void imprime_todas_combinacoes(int* tuple, int input_len, int r, t_pot_vet* s_vet, int s_vet_len) {
   int data[r];
-  imprime_combinacao(tuple, input_len, r, data, 0, 0);
+  imprime_combinacao(tuple, input_len, r, data, 0, 0, s_vet, s_vet_len);
 }
 
 void a_create_vectors(const char* fname, const int len) {
@@ -145,36 +175,43 @@ void c_get_conjuntos(t_vets mVets, const int len, const int input_len, const cha
 }
 
 // Conjunto potência é todos os subconjuntos possíveis de um conjunto
-void d_get_conjunto_potencia(t_vets mConj, int max_len) {
-  t_vets a_conj_pot[10];
-  t_vets b_conj_pot[10];
+void d_get_conjunto_potencia(t_vets mConj, int max_len, const char* fname_conjuntos_pot) {
+  const int conj_pot_len = 10;
+  t_pot_vet a_conj_pot[conj_pot_len];
+  t_pot_vet b_conj_pot[conj_pot_len];
 
   const int a_input_len = arr_len(mConj.vet1, max_len);
   const int b_input_len = arr_len(mConj.vet2, max_len);
 
   printf("\nConjunto Potencia P(A): ");
   for (int r = 1; r <= a_input_len; r++) {
-    imprime_todas_combinacoes(mConj.vet1, a_input_len, r);
+    imprime_todas_combinacoes(mConj.vet1, a_input_len, r, a_conj_pot, conj_pot_len);
   }
 
   printf("\nConjunto Potencia P(B): ");
   for (int r = 1; r <= b_input_len; r++) {
-    imprime_todas_combinacoes(mConj.vet2, b_input_len, r);
+    imprime_todas_combinacoes(mConj.vet2, b_input_len, r, b_conj_pot, conj_pot_len);
   }
+  
+  print_conjs_pot(a_conj_pot, 3, 20);
 }
 
 void e_get_conjunto_proprio(t_vets mConj, int max_len) {
+  const int conj_prop_len = 10;
+  t_pot_vet a_conj_prop[conj_prop_len];
+  t_pot_vet b_conj_prop[conj_prop_len];
+  
   const int a_input_len = arr_len(mConj.vet1, max_len);
   const int b_input_len = arr_len(mConj.vet2, max_len);
 
   printf("\nConjunto Próprio A: ");
   for (int r = 1; r < a_input_len; r++) {
-    imprime_todas_combinacoes(mConj.vet1, a_input_len, r);
+    imprime_todas_combinacoes(mConj.vet1, a_input_len, r, a_conj_prop, conj_prop_len);
   }
 
   printf("\nConjunto Próprio B: ");
   for (int r = 1; r < b_input_len; r++) {
-    imprime_todas_combinacoes(mConj.vet2, b_input_len, r);
+    imprime_todas_combinacoes(mConj.vet2, b_input_len, r, b_conj_prop, conj_prop_len);
   }
 }
 
@@ -190,8 +227,8 @@ int main() {
   // a_create_vectors(fname_arr, input_len);
   b_read_vectors(&mVets, fname_arr, input_len);
   c_get_conjuntos(mVets, len, input_len, fname_conjuntos, &mConj);
-  d_get_conjunto_potencia(mConj, input_len);
-  e_get_conjunto_proprio(mConj, input_len);
+  d_get_conjunto_potencia(mConj, input_len, fname_conjuntos_pot);
+  // e_get_conjunto_proprio(mConj, input_len);
 
   return 0;
 }
