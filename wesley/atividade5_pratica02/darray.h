@@ -19,7 +19,7 @@ typedef struct d_arr_int {
  * Adiciona um valor inteiro a uma lista de valores inteiros
  * @param arr    Array
  * @param value  Valor a ser adicionado
- * @return true=Sucesso na alocacao, false=Falha na alocação
+ * @return 0=Sucesso na alocacao, 1=Falha na alocação
  */
 int arr_int_add(arr_int* arr, int value) {
   int* tmp;
@@ -38,11 +38,11 @@ int arr_int_add(arr_int* arr, int value) {
     // Alocacao funcionou salva a nova lista
     arr->data = tmp;
     arr->data[arr->length - 1] = value;
-    return 1;
+    return 0;
   } else {
     // Restaura o tamanho original da lista
     arr->length = prev_length;
-    return 0;
+    return 1;
   }
 }
 

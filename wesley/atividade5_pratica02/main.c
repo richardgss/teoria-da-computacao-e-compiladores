@@ -235,15 +235,18 @@ int main() {
   // DEBUG ONLY
   arr_int_add(&sequencia_A, 1);
   arr_int_add(&sequencia_A, 2);
+  arr_int_add(&sequencia_A, 2);
   arr_int_add(&sequencia_A, 3);
   arr_int_add(&sequencia_A, 4);
 
   arr_int_add(&sequencia_B, 5);
   arr_int_add(&sequencia_B, 6);
   arr_int_add(&sequencia_B, 7);
+  arr_int_add(&sequencia_B, 7);
   arr_int_add(&sequencia_B, 8);
 
   // Apresenta na tela as sequencias de numeros naturais
+  printf("\nSalvando no arquivo.txt as sequencias A e B");
   printf("\nSequencia A: ");
   arr_int_print(sequencia_A);
   printf("\nSequencia B: ");
@@ -264,18 +267,38 @@ int main() {
   // --------------------- ATIVIDADE LETRA B ------------------------
   // Le as sequencias A e B do arquivo no modo texto
   arr_int_list_read_file_txt(sequencias_AB, 2, "arquivo.txt");
-
+    
+  printf("\n\nLeitura do arquivo.txt as sequencias A e B");
   printf("\nSequencia A: ");
   arr_int_print(sequencias_AB[0]);
   printf("\nSequencia B: ");
   arr_int_print(sequencias_AB[1]);
+  
+  // Salva as sequencias nas variaveis
+  sequencia_A = sequencias_AB[0];
+  sequencia_B = sequencias_AB[1];
 
+  // --------------------- ATIVIDADE LETRA C ------------------------
+  tuple_int conjunto_A = {};
+  tuple_int conjunto_B = {};
+  
+  // Converte as sequencias em tuplas
+  tuple_from_arr_int(&conjunto_A, sequencia_A);
+  tuple_from_arr_int(&conjunto_B, sequencia_B);
+  
+  printf("\n\nImprime os conjuntos A e B");
+  printf("\nConjunto A: ");
+  tuple_int_print(conjunto_A);
+  printf("\nConjunto B: ");
+  tuple_int_print(conjunto_B);
+  
   // Libera a alocacao dinamica das listas
   arr_clear(&sequencia_A);
   arr_clear(&sequencia_B);
-
-  // --------------------- ATIVIDADE LETRA C ------------------------
-
+  
+  // Libera a alocacao dinamica das tuplas
+  tuple_clear(&conjunto_A);
+  tuple_clear(&conjunto_B);
 
   return 0;
 }
