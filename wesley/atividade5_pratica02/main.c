@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <darray.h>
-#include <dtuple.h>
+#include "darray.h"
+#include "dtuple.h"
 
 //typedef struct vets {
 //  int vet1[20];
