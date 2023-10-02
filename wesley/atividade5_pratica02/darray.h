@@ -258,6 +258,7 @@ int arr_int_save_file_txt(arr_int arr, const char* f_name) {
  * Adiciona uma matriz de listas de inteiro em um arquivo no modo texto separado por virgulas
  * em que cada linha denota uma lista da matriz
  * @param arr    arr_int[] Contendo as listas de inteiros
+ * @param length Tamanho da matriz de listas a serem escritas no arquivo
  * @param f_name Nome do arquivo
  * @return 0=Sucesso, 1=Erro ao abrir arquivo
  */
@@ -296,16 +297,21 @@ int arr_int_list_save_file_txt(arr_int* arr, int length, const char* f_name) {
  * Recebe uma matriz de listas de inteiro de um arquivo no modo texto separado por virgulas
  * em que cada linha denota uma lista da matriz
  * @param arr    arr_int[] Contendo as listas de inteiros
+ * @param length Tamanho da matriz de listas a serem escritas no arquivo
  * @param f_name Nome do arquivo
+ * @param r_len  Quantidade de listas da matriz lidas do arquivo
  * @return 0=Sucesso, 1=Erro ao abrir arquivo
  */
-int arr_int_list_read_file_txt(arr_int* arr, int length, const char* f_name) {
+int arr_int_list_read_file_txt(arr_int* arr, int length, const char* f_name, int* r_len) {
   FILE *arq;
 
   int line_pos = 0;
   char * line = NULL;
   size_t len = 0;
   ssize_t read;
+
+  // Zera a quantidade de listas lidas
+  *r_len = 0;
 
   // Abre arquivo para escrita no modo binario
   arq = fopen(f_name, "r");
@@ -324,9 +330,16 @@ int arr_int_list_read_file_txt(arr_int* arr, int length, const char* f_name) {
       // Se o tamanho do buffer couber o conteudo recebido adiciona,
       // caso contrario ignora
       arr_int_from_csv_string(&arr[line_pos], csv);
+
+      // Incrementa a quantidade de listas lidas
+      *r_len += 1;
     }
 
     line_pos++;
+  }
+
+  if (line_pos > length) {
+    printf("O tamanho do buffer não coube o total de listas %d presente no arquivo.", line_pos);
   }
 
   // Libera alocacao dinamica do buffer
