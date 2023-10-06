@@ -15,6 +15,6 @@ public class EstruturaDados {
     
     public static void main(String[] args) {
         // new Atividade1BuscaBinaria().main();
-        // new Atividade2ArvoreBinaria().main();
+        new Atividade2ArvoreBinaria().main();
     }
 }

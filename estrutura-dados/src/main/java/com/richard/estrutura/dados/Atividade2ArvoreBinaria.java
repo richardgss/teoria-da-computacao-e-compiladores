@@ -41,6 +41,13 @@ public class Atividade2ArvoreBinaria {
         } else {
             System.out.println("Não achou 130");
         }
+        
+        System.out.println("Tamanho da arvore: " + arvore.length());
+        System.out.println("Menor ra da arvore rec: " + arvore.menor());
+        System.out.println("Maior ra da arvore rec: " + arvore.maior());
+        
+        System.out.println("Menor ra da arvore nrec: " + arvore.menor());
+        System.out.println("Maior ra da arvore nrec: " + arvore.maior());
     }
     
     void exemplo2() {
@@ -71,6 +78,13 @@ public class Atividade2ArvoreBinaria {
         } else {
             System.out.println("Não Achou ");
         }
+        
+        System.out.println("Tamanho da arvore: " + arvore.length());
+        System.out.println("Menor ra da arvore rec: " + arvore.menor());
+        System.out.println("Maior ra da arvore rec: " + arvore.maior());
+        
+        System.out.println("Menor ra da arvore nrec: " + arvore.menor());
+        System.out.println("Maior ra da arvore nrec: " + arvore.maior());
     }
     
     public void main() {

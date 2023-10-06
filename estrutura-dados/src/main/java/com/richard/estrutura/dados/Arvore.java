@@ -11,6 +11,7 @@ package com.richard.estrutura.dados;
  */
 public class Arvore<T> {
     NoArvore<T> raiz;
+    int size;
     
     public static <T> Arvore<T> inicializa() {
         Arvore<T> arvore = new Arvore<>();
@@ -59,6 +60,8 @@ public class Arvore<T> {
                 ant.esquerda = no;
             }
         }
+        
+        size++;
     }
    
     // infixa
@@ -79,6 +82,11 @@ public class Arvore<T> {
         System.out.println("");
     }
     
+    // tamanho
+    public int length() {
+        return size;
+    }
+    
     // Busca um no na arvore
     public T pesquisaArvore(int chave) {
         NoArvore<T> no = pesquisa(chave, raiz);
@@ -87,6 +95,70 @@ public class Arvore<T> {
         } else {
             return null;
         }
+    }
+    
+    // Busca o menor item a esquerda da arvore modo recursivo
+    public T menor() {
+        return menorItem(raiz);
+    }
+    
+    // Busca o maior item a esquerda da arvore modo recursivo
+    public T maior() {
+        return maiorItem(raiz);
+    }
+    
+    // Busca o menor item a esquerda da arvore modo não recursivo
+    public T menorFast() {
+        NoArvore<T> no, ant;
+        
+        no = raiz;
+        ant = raiz;
+        
+        while(no != null) {
+            ant = no.esquerda != null ? no.esquerda : no;
+            no = no.esquerda;
+        }
+        
+        return (T) ant;
+    }
+    
+    // Busca o maior item a esquerda da arvore modo não recursivo
+    public T maiorFast() {
+        NoArvore<T> no, ant;
+        
+        no = raiz;
+        ant = raiz;
+        
+        while(no != null) {
+            ant = no.direita != null ? no.direita : no;
+            no = no.direita;
+        }
+        
+        return (T) ant;
+    }
+    
+    T menorItem(NoArvore<T> no) {
+        if (no == null) {
+            return null;
+        }
+        
+        if (no.esquerda == null) {
+            return (T) no;
+        }
+        
+        return (T) menorItem(no.esquerda);
+    }
+    
+    T maiorItem(NoArvore<T> no) {
+        if (no == null) {
+            return null;
+        }
+        
+        if (no.direita == null) {
+            return (T) no;
+        }
+        
+        return (T) maiorItem(no.direita);
     }
     
     void caminharEmOrdem(NoArvore<T> no) {
@@ -134,6 +206,6 @@ public class Arvore<T> {
         
         p = no; // raiz
         
-        
+        size--;
     }
 }

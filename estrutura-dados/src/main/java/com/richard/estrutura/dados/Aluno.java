@@ -14,6 +14,7 @@ public class Aluno {
     
     public Aluno(int ra, String nome) {
         this.nome = nome;
+        this.ra = ra;
     }
     
     @Override
