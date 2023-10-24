@@ -59,14 +59,36 @@ void imprime_matriz(int grafo[4][4]) {
     }
 }
 
+int distancia(int grafo[4][4], int c1, int c2) {
+    int dist = 0;
+    
+    if (c1 < c2 && c2 - c1 > 0) {
+        dist += grafo[c2 - 1][c2];
+        // printf("dist[%d, %d]: %d\n", c2 - 1, c2, dist);
+        dist += distancia(grafo, c1, c2 - 1);
+    } else if (c2 < c1 && c1 - c2 > 0) {
+        dist += grafo[c1 - 1][c1];
+        // printf("dist[%d, %d]: %d\n", c1 - 1, c2, dist);
+        dist += distancia(grafo, c1 - 1, c2);
+    } else {
+        dist = grafo[c1][c2];
+    }
+    
+    return dist;
+}
+
 int main() {
     int grafo[4][4];
     
     informa_distancias(grafo);
     int qtd = qtde_estradas(grafo);
     imprime_matriz(grafo);
+    int c1 = 3;
+    int c2 = 0;
+    int dist = distancia(grafo, c1, c2);
     
     printf("Qtde de estradas: %d\n", qtd);
+    printf("Distancia [%d, %d]: %d", c1, c2, dist);
     
     return 0;
 }
