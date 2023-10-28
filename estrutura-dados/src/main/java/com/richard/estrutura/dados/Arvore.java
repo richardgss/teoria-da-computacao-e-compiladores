@@ -19,7 +19,7 @@ public class Arvore<T> {
         return arvore;
     }
     
-    public void inserir(int info, T dados) {
+    public void inserir(String info, T dados) {
         NoArvore<T> no = new NoArvore<>();
         no.info = info;
         no.dados = dados;
@@ -40,12 +40,14 @@ public class Arvore<T> {
                 // Faz a busca do lugar ao qual ao qual deve ser inserido o nó
                 ant = aux;
                 
-                if (aux.info == info) {
+                int comparacao = info.compareTo(aux.info);
+                
+                if (comparacao == 0) {
                     System.out.println("\nDado inserido já existe!");
                     return; 
                 }
                 
-                if (info > aux.info) {
+                if (comparacao > 0) {
                     // Valor e maior que o no atual caminha para a direita
                     aux = aux.direita;
                 } else {
@@ -54,7 +56,7 @@ public class Arvore<T> {
                 }
             }
             
-            if (ant.info < info) {
+            if (ant.info.compareTo(info) < 0) {
                 ant.direita = no;
             } else {
                 ant.esquerda = no;
@@ -88,7 +90,7 @@ public class Arvore<T> {
     }
     
     // Busca um no na arvore
-    public T pesquisaArvore(int chave) {
+    public T pesquisaArvore(String chave) {
         NoArvore<T> no = pesquisa(chave, raiz);
         if (no != null) {
             return no.dados;
@@ -137,7 +139,7 @@ public class Arvore<T> {
         return (T) ant;
     }
     
-    T menorItem(NoArvore<T> no) {
+    private T menorItem(NoArvore<T> no) {
         if (no == null) {
             return null;
         }
@@ -149,7 +151,7 @@ public class Arvore<T> {
         return (T) menorItem(no.esquerda);
     }
     
-    T maiorItem(NoArvore<T> no) {
+    private T maiorItem(NoArvore<T> no) {
         if (no == null) {
             return null;
         }
@@ -161,7 +163,7 @@ public class Arvore<T> {
         return (T) maiorItem(no.direita);
     }
     
-    void caminharEmOrdem(NoArvore<T> no) {
+    private void caminharEmOrdem(NoArvore<T> no) {
         if (no != null) {
             caminharEmOrdem(no.esquerda);
             System.out.print(no.toString());
@@ -169,7 +171,7 @@ public class Arvore<T> {
         }
     }
     
-    void caminharEmPreOrdem(NoArvore<T> no) {
+    private void caminharEmPreOrdem(NoArvore<T> no) {
         if (no != null) {
             System.out.print(no.toString());
             caminharEmPreOrdem(no.esquerda);
@@ -177,7 +179,7 @@ public class Arvore<T> {
         }
     }
     
-    void caminharEmPosOrdem(NoArvore<T> no) {
+    private void caminharEmPosOrdem(NoArvore<T> no) {
         if (no != null) {
             caminharEmPreOrdem(no.esquerda);
             caminharEmPreOrdem(no.direita);
@@ -185,19 +187,19 @@ public class Arvore<T> {
         }
     }
     
-    NoArvore<T> pesquisa(int chave, NoArvore<T> no) {
+    private NoArvore<T> pesquisa(String chave, NoArvore<T> no) {
         if (no == null) {
             return null;
-        } else if (chave < no.info){
+        } else if (chave.compareTo(no.info) < 0){
             return pesquisa(chave, no.esquerda);
-        } else if (chave > no.info){
+        } else if (chave.compareTo(no.info) > 0){
             return pesquisa(chave, no.direita);
         } else {
             return no;
         }
     }
     
-    void excluir(int chave, NoArvore<T> no) {
+    private void excluir(int chave, NoArvore<T> no) {
         NoArvore<T> p;
         NoArvore<T> q;
         NoArvore<T> rp;
