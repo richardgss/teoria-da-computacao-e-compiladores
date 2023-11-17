@@ -95,6 +95,7 @@ int main() {
 
   string_clear(&str);
   string_clear(&str_r);
+  string_clear(&str_len);
 
   return 0;
 }
